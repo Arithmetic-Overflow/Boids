@@ -1,5 +1,5 @@
 GPP = g++
-OBJ = boidsim.o Boid.o math.o
+OBJ = boidsim.o Boid.o Quadtree.o math.o
 
 main : $(OBJ)
 	g++ $(OBJ) -o boidsim -lsfml-graphics -lsfml-window -lsfml-system

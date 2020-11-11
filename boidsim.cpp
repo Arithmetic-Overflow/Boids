@@ -3,6 +3,12 @@
     #include "boidsim.hpp"
 #endif
 
+#ifndef BOID
+#define BOID
+    #include "Boid.hpp"
+#endif
+
+
 float boidSize = 20;
 
 void updateBoidVelocities(Boid boidArray[]) {

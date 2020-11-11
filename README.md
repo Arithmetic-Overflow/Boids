@@ -47,18 +47,19 @@ Have fun messing around with it!
 
 
 ## What's Coming?
-### Refactoring Variables
-There's a lot of 'junk' variables left over from earlier stages of development.
-I intend to clean up the code before I progress to make my life and the life of anyone reading it slightly less insufferable.
-
-### 'Vision' Overhaul
-Currently the boids are affected by boids behind them. I plan to use the dot product (and arccosine) to calculate the angle between boids.
-I will use this to restrict the boids to being only affected by boids in front of them. Hopefully this will cause the simulation to look more natural, and avoid them 'clumping up' into 1 big group too much.
+### Refactoring File Structure
+I'm going to give each class its own header file and put the class definitions in their proper place
 
 ### Performance Overhaul
 Once the boid 'vision' works as intended and the variables are cleaned up I will work on performance. Currently my algorithms for iterating through boids are O(n^2). For each boid I'm iterating through every other boid. I'm hoping to implement some sort of spatial partitioning scheme to make this run much smoothly for high numbers of boids.
 
 The optimisation I have in mind will be a quadtree which is an O(log n) lookup, making my algorithm O(n log n) overall (if my maths doesn't fail me).
+
+### Make Boid Movement Frame Independent
+Once the quadtree is implemented I will make a clock object so that the boids movement isn't tied to the framerate of the window. This means that a lower framerate won't slow boids down and a higher framerate won't lead to erratic behaviour. The downside of this though is that the simulation will be 'less accurate' as the timesteps are not perfectly uniform (as they would be in a pre-rendered simulation) but as this is a realtime application and the framerate should be rather high after optimisation I don't think that this will lead to a visible difference.
+
+### Tweaking The Weights
+The weights need to be tweaked to make the simulation look more natural, but this is a fairly trivial and length process: I'll leave it till the end.
 
 ### Fullscreen
 I am working on gettings the SFML Fullscreen mode to better integrate with the simulation.

@@ -1,6 +1,6 @@
-#ifndef BOIDSIM
-#define BOIDSIM
-    #include "boidsim.hpp"
+#ifndef BOID
+#define BOID
+    #include "Boid.hpp"
 #endif
 
 
