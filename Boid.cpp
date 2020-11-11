@@ -4,10 +4,9 @@
 #endif
 
 
-int numBoids = 200;
+int numBoids = 100;
 float ms = 2.0f;
-float maxA = 0.2f;
-float ts = 0.05f;
+float maxA = 0.1f;
 
 unsigned int canvasWidth;
 unsigned int canvasHeight;
@@ -54,7 +53,7 @@ Vector2f Boid::separation(Boid boidArray[], int selfIndex) {
     for(int i = 0; i < numBoids; i++) {
         Boid thisBoid = boidArray[i];
         
-        if(i != selfIndex && dist(this->p, thisBoid.p) <= visionRad) {
+        if(i != selfIndex && isInVision(thisBoid)) {
             separationVec += (this->p - thisBoid.p) / (dist(this->p, thisBoid.p));
         }
     }
@@ -92,7 +91,7 @@ Vector2f Boid::calculatev(Boid boidArray[], int selfIndex) {
     for(int i = 0; i < numBoids; i++) {
         Boid thisBoid = boidArray[i];
 
-        if(i != selfIndex && dist(this->p, thisBoid.p) <= visionRad) {
+        if(i != selfIndex && isInVision(thisBoid)) {
             averagePos += thisBoid.p;
             averageVel += thisBoid.v;
 
@@ -111,10 +110,26 @@ Vector2f Boid::calculatev(Boid boidArray[], int selfIndex) {
 
     newA = normalize(newA, min(maxA, magnitude(newA)));
 
-    this->v += newA;
-    this->v = normalize(this->v, ms);
+    Vector2f newV = normalize(this->v + newA, ms);
 
-    return this->v;
+    return newV;
+}
+
+
+float Boid::angleBetween(Boid target) {
+    Vector2f deltaP = target.p - this->p;
+    float a = angle(this->v, deltaP);
+
+    // cout << a << endl;
+
+    return a;
+}
+
+bool Boid::isInVision(Boid target) {
+    bool inVision = dist(this->p, target.p) < visionRad;
+    inVision &= this->angleBetween(target) < visionAngle;
+
+    return inVision;
 }
 
 

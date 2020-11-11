@@ -7,8 +7,8 @@ main : $(OBJ)
 %.o : %.cpp
 	g++ -c $<
 
-setupDisplay:
-	export DISPLAY:=0
+exportDisplay:
+	export DISPLAY=:0
 
 clean:
 	rm -fv *.o boidsim

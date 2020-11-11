@@ -34,8 +34,8 @@ void moveBoids(Boid boidArray[]) {
 int main(int argc, char *argv[]) {
     srand((unsigned int) time(NULL));
 
-    canvasWidth = 500;
-    canvasHeight = 500;
+    canvasWidth = 900;
+    canvasHeight = 900;
 
     VideoMode desktopDetails = VideoMode::getDesktopMode();
     canvasWidth = desktopDetails.width;
@@ -94,23 +94,8 @@ int main(int argc, char *argv[]) {
 
 
 /*
+Personal comment
 
-Ubuntu:
-
-cd /mnt/c/projects/games/c++/boids
-export DISPLAY=:0
-
-g++ -I/mnt/c/SFML/include -c main.cpp -o main.o
-g++ -L/mnt/c/SFML/lib -o pogoboi.exe -o main.o -lsfml-graphics -lsfml-window -lsfml-system
-./pogoboi
-
-
-
-Windows:
-
-g++ -IC:\SFML\include -c pogoboi.cpp -o pogo.o
-g++ -LC:\SFML\lib -o pogoXD.exe -o pogo.o -lsfml-graphics -lsfml-window -lsfml-system
-
-C:\SFML-2.5.1-windows-vc14-64-bit\SFML-2.5.1
-
+Ubuntu WSL:
+cd /mnt/c/users/aryag/onedrive/documents/github/boids
 */
