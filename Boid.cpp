@@ -4,7 +4,7 @@
 #endif
 
 
-int numBoids = 100;
+int numBoids = 50;//00;
 float ms = 2.0f;
 float maxA = 0.1f;
 

@@ -8,6 +8,16 @@
     #include "Boid.hpp"
 #endif
 
+#ifndef QUADTREE
+#define QUADTREE
+    #include "Quadtree.hpp"
+#endif
+
+
+// void drawQuad(Quadtree q, RenderWindow canvas) {
+
+// }
+
 
 float boidSize = 20;
 
@@ -16,17 +26,17 @@ void updateBoidVelocities(Boid boidArray[]) {
 
     Boid *thisBoid = boidArray;
     
-    for(int i = 0; i < numBoids; i++) {
-        newVelocities[i] = thisBoid->calculatev(boidArray, i);
-        thisBoid++;
-    }
+    // for(int i = 0; i < numBoids; i++) {
+    //     newVelocities[i] = thisBoid->calculatev(boidArray, i);
+    //     thisBoid++;
+    // }
 
-    thisBoid = boidArray;
+    // thisBoid = boidArray;
 
-    for(int i = 0; i < numBoids; i++) {
-        thisBoid->v = newVelocities[i];
-        thisBoid++;
-    }
+    // for(int i = 0; i < numBoids; i++) {
+    //     thisBoid->v = newVelocities[i];
+    //     thisBoid++;
+    // }
 }
 
 
@@ -82,11 +92,52 @@ int main(int argc, char *argv[]) {
 
         canvas.clear();
 
+        Quadtree qtree = Quadtree(boidArray);
+
+        vector<Boid> n = qtree.nearbyBoids(boidArray[0]);
+        // cout << n.size() << endl;;
+
+        // for(Boid b : n) {
+        //     cout << b.p.x << ", " << b.p.y << endl;
+        // }
+
+        for(RectangleShape r : qtree.getRect()) {
+            canvas.draw(r);
+        }
+    
+        // drawQuad(qtree, canvas);
+
+        // delete &qtree;
+
+        RectangleShape bounds(Vector2f(500, 300));
+        bounds.move(400, 400);
+        bounds.setFillColor(Color::Transparent);
+        bounds.setOutlineThickness(5);
+        bounds.setOutlineColor(Color(200,200,0));
+        canvas.draw(bounds);
+
         for(int i = 0; i < numBoids; i++) {
             Boid thisBoid = boidArray[i];
 
             boidSprite.setPosition(thisBoid.p);
             boidSprite.setRotation(thisBoid.rotation());
+            
+            if(i == 0) {
+                // boidSprite.setColor(Color(255,255,255));
+                // canvas.draw(boidSprite);
+            }
+
+            // else {
+                boidSprite.setColor(Color(140,0,0));
+            // }
+
+            canvas.draw(boidSprite);
+        }
+
+        for(Boid thisBoid : n) {
+            boidSprite.setPosition(thisBoid.p);
+            boidSprite.setRotation(thisBoid.rotation());
+            boidSprite.setColor(Color(255,0,0));
             canvas.draw(boidSprite);
         }
 
