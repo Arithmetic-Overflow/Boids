@@ -11,6 +11,9 @@
 float dist(Vector2f v1, Vector2f v2) {
     Vector2f relVec = (v1 - v2);
     float mag = sqrt(relVec.x * relVec.x + relVec.y * relVec.y);
+    if(isnan(mag)) {
+        mag = 0.0f;
+    }
 
     return mag;
 }

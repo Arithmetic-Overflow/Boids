@@ -26,17 +26,17 @@ void updateBoidVelocities(Boid boidArray[]) {
 
     Boid *thisBoid = boidArray;
     
-    // for(int i = 0; i < numBoids; i++) {
-    //     newVelocities[i] = thisBoid->calculatev(boidArray, i);
-    //     thisBoid++;
-    // }
+    for(int i = 0; i < numBoids; i++) {
+        newVelocities[i] = thisBoid->calculatev(boidArray, i);
+        thisBoid++;
+    }
 
-    // thisBoid = boidArray;
+    thisBoid = boidArray;
 
-    // for(int i = 0; i < numBoids; i++) {
-    //     thisBoid->v = newVelocities[i];
-    //     thisBoid++;
-    // }
+    for(int i = 0; i < numBoids; i++) {
+        thisBoid->v = newVelocities[i];
+        thisBoid++;
+    }
 }
 
 
@@ -109,8 +109,10 @@ int main(int argc, char *argv[]) {
 
         // delete &qtree;
 
-        RectangleShape bounds(Vector2f(500, 300));
-        bounds.move(400, 400);
+        // RectangleShape bounds(Vector2f(500, 300));
+        // bounds.move(400, 400);
+        CircleShape bounds(boidArray[0].visionRad);
+        bounds.move(boidArray[0].p - Vector2f(boidArray[0].visionRad+boidSize/2, boidArray[0].visionRad+boidSize/2));
         bounds.setFillColor(Color::Transparent);
         bounds.setOutlineThickness(5);
         bounds.setOutlineColor(Color(200,200,0));
@@ -135,6 +137,7 @@ int main(int argc, char *argv[]) {
         }
 
         for(Boid thisBoid : n) {
+            if(!boidArray[0].isInVision(thisBoid)) { continue; }
             boidSprite.setPosition(thisBoid.p);
             boidSprite.setRotation(thisBoid.rotation());
             boidSprite.setColor(Color(255,0,0));

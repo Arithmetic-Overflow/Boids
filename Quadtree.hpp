@@ -22,6 +22,7 @@ class Quadtree {
         bool containsPoint(Vector2i);
         bool containsBoid(Boid);
 
+        void insertBoid(Boid);
         void limitMembers();
         void createChildren();
 

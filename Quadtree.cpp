@@ -177,19 +177,19 @@ vector<Boid> Quadtree::closeBoidsInNode(Vector2i vertices[4]) {
 
 
 vector<Boid> Quadtree::nearbyBoids(Boid boid) {
-    // Vector2i searchSquare[4] = {
-    //     Vector2i(boid.p.x - boid.visionRad, boid.p.y - boid.visionRad),
-    //     Vector2i(boid.p.x - boid.visionRad, boid.p.y + boid.visionRad),
-    //     Vector2i(boid.p.x + boid.visionRad, boid.p.y + boid.visionRad),
-    //     Vector2i(boid.p.x + boid.visionRad, boid.p.y - boid.visionRad)
-    // };
-
     Vector2i searchSquare[4] = {
-        Vector2i(400, 400),
-        Vector2i(900, 400),
-        Vector2i(900, 700),
-        Vector2i(400, 700)
+        Vector2i(boid.p.x - boid.visionRad, boid.p.y - boid.visionRad),
+        Vector2i(boid.p.x - boid.visionRad, boid.p.y + boid.visionRad),
+        Vector2i(boid.p.x + boid.visionRad, boid.p.y + boid.visionRad),
+        Vector2i(boid.p.x + boid.visionRad, boid.p.y - boid.visionRad)
     };
+
+    // Vector2i searchSquare[4] = {
+        // Vector2i(400, 400),
+        // Vector2i(900, 400),
+        // Vector2i(900, 700),
+        // Vector2i(400, 700)
+    // };
 
     vector<Boid> nearby = this->closeBoidsInNode(searchSquare);
 

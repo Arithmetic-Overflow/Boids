@@ -4,7 +4,7 @@
 #endif
 
 
-int numBoids = 50;//00;
+int numBoids = 100;
 float ms = 2.0f;
 float maxA = 0.1f;
 
@@ -127,7 +127,7 @@ float Boid::angleBetween(Boid target) {
 
 bool Boid::isInVision(Boid target) {
     bool inVision = dist(this->p, target.p) < visionRad;
-    inVision &= this->angleBetween(target) < visionAngle;
+    //inVision &= this->angleBetween(target) < visionAngle;
 
     return inVision;
 }
