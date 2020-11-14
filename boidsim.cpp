@@ -13,6 +13,8 @@
     #include "Quadtree.hpp"
 #endif
 
+#define FPSCAP 60
+
 
 // void drawQuad(Quadtree q, RenderWindow canvas) {
 
@@ -20,14 +22,17 @@
 
 
 float boidSize = 20;
+float dt;
 
 void updateBoidVelocities(Boid boidArray[]) {
     Vector2f newVelocities[numBoids];
 
     Boid *thisBoid = boidArray;
+    Quadtree qtree(boidArray);
     
     for(int i = 0; i < numBoids; i++) {
-        newVelocities[i] = thisBoid->calculatev(boidArray, i);
+        vector<Boid> nearby = qtree.nearbyBoids(*thisBoid);
+        newVelocities[i] = thisBoid->calculatev(nearby);
         thisBoid++;
     }
 
@@ -58,6 +63,7 @@ int main(int argc, char *argv[]) {
     canvasHeight = desktopDetails.height;
 
     RenderWindow canvas(VideoMode(canvasWidth, canvasHeight), "sfmltest", Style::Close | Style::Titlebar);//Style::Fullscreen);
+    canvas.setFramerateLimit(FPSCAP);
 
     Texture boidTexture;
     boidTexture.loadFromFile("./sprites/Arrow20.png");
@@ -70,8 +76,12 @@ int main(int argc, char *argv[]) {
         boidArray[i] = Boid();
     }
 
+
+    Clock clock;
     Event event;
+
     while(canvas.isOpen()) {
+        dt = clock.restart().asSeconds();
         // while (canvas.pollEvent(event)) {
         //     switch(event.type) {
         //         case Event::Closed:
@@ -92,18 +102,18 @@ int main(int argc, char *argv[]) {
 
         canvas.clear();
 
-        Quadtree qtree = Quadtree(boidArray);
+        // Quadtree qtree = Quadtree(boidArray);
 
-        vector<Boid> n = qtree.nearbyBoids(boidArray[0]);
+        // vector<Boid> n = qtree.nearbyBoids(boidArray[0]);
         // cout << n.size() << endl;;
 
         // for(Boid b : n) {
         //     cout << b.p.x << ", " << b.p.y << endl;
         // }
 
-        for(RectangleShape r : qtree.getRect()) {
-            canvas.draw(r);
-        }
+        // for(RectangleShape r : qtree.getRect()) {
+        //     canvas.draw(r);
+        // }
     
         // drawQuad(qtree, canvas);
 
@@ -111,12 +121,14 @@ int main(int argc, char *argv[]) {
 
         // RectangleShape bounds(Vector2f(500, 300));
         // bounds.move(400, 400);
-        CircleShape bounds(boidArray[0].visionRad);
-        bounds.move(boidArray[0].p - Vector2f(boidArray[0].visionRad+boidSize/2, boidArray[0].visionRad+boidSize/2));
-        bounds.setFillColor(Color::Transparent);
-        bounds.setOutlineThickness(5);
-        bounds.setOutlineColor(Color(200,200,0));
-        canvas.draw(bounds);
+
+        // CircleShape bounds(boidArray[0].visionRad);
+        // bounds.move(boidArray[0].p - Vector2f(boidArray[0].visionRad+boidSize/2, boidArray[0].visionRad+boidSize/2));
+
+        // bounds.setFillColor(Color::Transparent);
+        // bounds.setOutlineThickness(5);
+        // bounds.setOutlineColor(Color(200,200,0));
+        // canvas.draw(bounds);
 
         for(int i = 0; i < numBoids; i++) {
             Boid thisBoid = boidArray[i];
@@ -124,30 +136,28 @@ int main(int argc, char *argv[]) {
             boidSprite.setPosition(thisBoid.p);
             boidSprite.setRotation(thisBoid.rotation());
             
-            if(i == 0) {
+            // if(i == 0) {
                 // boidSprite.setColor(Color(255,255,255));
                 // canvas.draw(boidSprite);
-            }
+            // }
 
             // else {
-                boidSprite.setColor(Color(140,0,0));
+                // boidSprite.setColor(Color(140,0,0));
             // }
 
             canvas.draw(boidSprite);
         }
 
-        for(Boid thisBoid : n) {
-            if(!boidArray[0].isInVision(thisBoid)) { continue; }
-            boidSprite.setPosition(thisBoid.p);
-            boidSprite.setRotation(thisBoid.rotation());
-            boidSprite.setColor(Color(255,0,0));
-            canvas.draw(boidSprite);
-        }
+        // for(Boid thisBoid : n) {
+        //     if(!boidArray[0].isInVision(thisBoid)) { continue; }
+        //     boidSprite.setPosition(thisBoid.p);
+        //     boidSprite.setRotation(thisBoid.rotation());
+        //     boidSprite.setColor(Color(255,0,0));
+        //     canvas.draw(boidSprite);
+        // }
 
         canvas.display();
     }
-
-    cout << canvasWidth << endl << canvasHeight << endl;
 
     return 0;
 }

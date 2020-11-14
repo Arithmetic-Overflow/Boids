@@ -4,9 +4,9 @@
 #endif
 
 
-int numBoids = 100;
-float ms = 2.0f;
-float maxA = 0.1f;
+int numBoids = 200;
+float ms = 150.0f;
+float maxA = 5.0f;
 
 unsigned int canvasWidth;
 unsigned int canvasHeight;
@@ -47,13 +47,13 @@ void Boid::move() {
 }
 
 
-Vector2f Boid::separation(Boid boidArray[], int selfIndex) {
+Vector2f Boid::separation(vector<Boid> nearby) {
     Vector2f separationVec(0.0f ,0.0f);
 
-    for(int i = 0; i < numBoids; i++) {
-        Boid thisBoid = boidArray[i];
+    for(int i = 0; i < nearby.size(); i++) {
+        Boid thisBoid = nearby[i];
         
-        if(i != selfIndex && isInVision(thisBoid)) {
+        if(this->isInVision(thisBoid)) {
             separationVec += (this->p - thisBoid.p) / (dist(this->p, thisBoid.p));
         }
     }
@@ -80,7 +80,7 @@ Vector2f Boid::cmcohesion(Vector2f avPos) {
 }
 
 
-Vector2f Boid::calculatev(Boid boidArray[], int selfIndex) {
+Vector2f Boid::calculatev(vector<Boid> nearby) {
     Vector2f newA(0.0f, 0.0f);
 
     Vector2f averagePos(0.0f, 0.0f);
@@ -88,10 +88,10 @@ Vector2f Boid::calculatev(Boid boidArray[], int selfIndex) {
 
     int boidsInView = 0;
 
-    for(int i = 0; i < numBoids; i++) {
-        Boid thisBoid = boidArray[i];
+    for(int i = 0; i < nearby.size(); i++) {
+        Boid thisBoid = nearby[i];
 
-        if(i != selfIndex && isInVision(thisBoid)) {
+        if(this->isInVision(thisBoid)) {
             averagePos += thisBoid.p;
             averageVel += thisBoid.v;
 
@@ -103,14 +103,20 @@ Vector2f Boid::calculatev(Boid boidArray[], int selfIndex) {
         averagePos /= (float) boidsInView;
         averageVel /= (float) boidsInView;
 
-        newA += separation(boidArray, selfIndex);
+        newA += separation(nearby);
         newA += cmcohesion(averagePos);
         newA += allignment(averageVel);
     }
 
-    newA = normalize(newA, min(maxA, magnitude(newA)));
+    float msCap = ms*dt;
+    float maxACap = maxA*dt;
 
-    Vector2f newV = normalize(this->v + newA, ms);
+    newA *= dt;
+    newA = normalize(newA, min(maxACap, magnitude(newA)));
+    
+    Vector2f newV = (this->v + newA) * dt;
+    newV = normalize(newV, msCap);
+    
 
     return newV;
 }
@@ -126,8 +132,8 @@ float Boid::angleBetween(Boid target) {
 }
 
 bool Boid::isInVision(Boid target) {
-    bool inVision = dist(this->p, target.p) < visionRad;
-    //inVision &= this->angleBetween(target) < visionAngle;
+    bool inVision = dist(this->p, target.p) < visionRad &&
+                    this->angleBetween(target) < visionAngle;
 
     return inVision;
 }

@@ -1,19 +1,56 @@
 # Boids
-A C++/SFML implementation of boids.
+A 2D C++/SFML implementation of boids.
 
 Tested on Ubuntu (WSL2 Windows 10)
 
+## What Are Boids?
+Boids are ["bird-oid/bird-like objects"](https://en.wikipedia.org/wiki/Boids) that exhibit a flocking behaviour. This is done so through the use of 3 simple rules:
+1. Separation
+2. Alignment
+3. Cohesion
+
+Each rule is only applied to those boids that are in vision of the current boid. Each boid has a maximum distance that it can see and a maximum angle that its vision spans (for the purposes of this implementation at least).
+
+### Separation
+Each boid will try to avoid crashing into other nearby boids (by exhibiting a steering force away from the position of nearby boids). For my implementation I have decided that the closer the boids are, the greater the steering is. I have specifically used the function 1/distance to scale the steering force.
+
+### Alignment
+Each boid will try to match the same velocity as nearby boids. Boids in vicinity of each other will try to steer to be heading the same direction as each other.
+
+### Cohesion
+Each boid will try to steer towards the average position of nearby boids. Boids in vicinity will try to cluster to the same location, along with separation this creates an equilibrium where the boids can form a (normally circular or spherical) flying formation
+
+### More Rules
+None of hte following rules are explicitly specified when writing an implementation of boids but they are either based off the behaviours and limitations of real bird, or are sensible guidelines for your own implementation.
+
+**Blind-spots:** The inability for boids to see behind them is not necessary for boid behaviour, but I felt it was fitting as birds don't have vision that spans all 360 degrees, so I added a blind-spot to each boid.
+
+**Constant speed:** If a bird is slower than a minimum threshold value it will begin to lose altitude. And birds can also (obviously) not accelerate indefinately. In order to try and capture this I have set a certain speed that each boid must always fly at.
+
+**Maximum acceleration:** Birds can only turn so fast, and so are boids have a maximum acceleration. The (magnitude of) acceleration of a boid can be any value between 0 and the maximum acceleration threshold. Acceleration in this context doesn't determine how quickly their *speed* changes but how quickly their *velocity* changes. The velocity of a boid is not only the speed but the direction in which it is facing. A higher acceleration means a quicker turn and a smaller turn radius.
+
+
 ## Installing Dependencies and Building The Project
-Currently I have pretty poor support for Windows and OSX.
-This is my first proper use of C++ and I can't get SFML to install correctly on Windows.
-Apologies for the lack of support, and if anyone has some resources where I can learn about this it would be well appreciated.
+Okay, so you want to build and run the project.
+Currently I have little support for Windows and OSX. But in all fairness the Linux and OSX (and WSL/WSL2) builds for the project should be near identical.
+
+I have provided the instructions for going from a fresh install of a Ubuntu WSL to a working executable of this project.
+
+### Installing the g++ compiler
+In order to install the g++ compiler:
+  bash: `sudo apt-get install g++`
+
+The g++ compiler will turn the C++ source code into executable machine code.
+If you wish to use Clang instead of g++ then you will need to edit the makefile.
+(Simply find and replace all instanced of 'g++' with 'clang')
+
 
 ### Installing the SFML library:
 In order to install the C++ SFML library:
   bash: `sudo apt-get install sfml`
         
 
-### Building the project and the Makefile
+### The makefile and building the project
 Once installed download the project and put it in all under the same directoy.
 Make sure to maintain the directory structure of the Sprites folder (don't change anything).
 Once all contents have been placed under the same directory compile using make:
@@ -46,23 +83,9 @@ The window will be the exact width and height of your display. If you wish for i
 Have fun messing around with it!
 
 
-## What's Coming?
-### Refactoring File Structure
-I'm going to give each class its own header file and put the class definitions in their proper place
+## Future Updates:
 
-### Performance Overhaul
-Once the boid 'vision' works as intended and the variables are cleaned up I will work on performance. Currently my algorithms for iterating through boids are O(n^2). For each boid I'm iterating through every other boid. I'm hoping to implement some sort of spatial partitioning scheme to make this run much smoothly for high numbers of boids.
+### Performance Increase
+Currently the quadtree has no insert method and instead 'inserts' the whole array into it at once. This might hinder performance (I can't analyse the complexity but I susepct it's O(n^2) to insert all boids when it should only be O(n log n)).
 
-The optimisation I have in mind will be a quadtree which is an O(log n) lookup, making my algorithm O(n log n) overall (if my maths doesn't fail me).
-
-### Make Boid Movement Frame Independent
-Once the quadtree is implemented I will make a clock object so that the boids movement isn't tied to the framerate of the window. This means that a lower framerate won't slow boids down and a higher framerate won't lead to erratic behaviour. The downside of this though is that the simulation will be 'less accurate' as the timesteps are not perfectly uniform (as they would be in a pre-rendered simulation) but as this is a realtime application and the framerate should be rather high after optimisation I don't think that this will lead to a visible difference.
-
-### Tweaking The Weights
-The weights need to be tweaked to make the simulation look more natural, but this is a fairly trivial and length process: I'll leave it till the end.
-
-### Fullscreen
-I am working on gettings the SFML Fullscreen mode to better integrate with the simulation.
-Fullscreen is not planned in the near future as it hinders testing and I have no real incentive to.
-
-It is however going to come at some point down the line when the program is more refined.
+An insert method needs to be added and used.

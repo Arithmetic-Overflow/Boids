@@ -20,3 +20,4 @@ extern int numBoids;        // number of boids in the simulation
 extern float boidSize;      // will be used in the future to scale sprite size
 extern float ms;            // max movespeed of the boids
 extern float maxA;          // max acceleration of the boids
+extern float dt;            // time passed each frame

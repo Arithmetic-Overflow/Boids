@@ -202,6 +202,13 @@ vector<Boid> Quadtree::nearbyBoids(Boid boid) {
     // }
     // cout << endl;
 
+    for(int i = 0; i < nearby.size(); i++) {
+        if(nearby[i].p == boid.p) {
+            nearby.erase(nearby.begin() + i);
+            break;
+        }
+    }
+
     return nearby;
 }
 
