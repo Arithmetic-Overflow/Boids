@@ -21,7 +21,7 @@ Each boid will try to match the same velocity as nearby boids. Boids in vicinity
 Each boid will try to steer towards the average position of nearby boids. Boids in vicinity will try to cluster to the same location, along with separation this creates an equilibrium where the boids can form a (normally circular or spherical) flying formation
 
 ### More Rules
-None of hte following rules are explicitly specified when writing an implementation of boids but they are either based off the behaviours and limitations of real bird, or are sensible guidelines for your own implementation.
+None of the following rules are explicitly specified when writing an implementation of boids but they are either based off the behaviours and limitations of real bird, or are sensible guidelines for your own implementation.
 
 **Blind-spots:** The inability for boids to see behind them is not necessary for boid behaviour, but I felt it was fitting as birds don't have vision that spans all 360 degrees, so I added a blind-spot to each boid.
 
