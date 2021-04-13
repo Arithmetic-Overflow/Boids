@@ -1,6 +1,8 @@
 # Boids
 A 2D C++/SFML implementation of boids.
 
+<img src="https://imgur.com/6tPXxam.gif" loading="eager" />
+
 Tested on Ubuntu (WSL2 Windows 10)
 
 ## What Are Boids?
