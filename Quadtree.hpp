@@ -11,7 +11,6 @@ class Quadtree {
         Vector2i dim;           // (width, height) of the quadrant
 
         Quadtree *children[4] = {NULL, NULL, NULL, NULL};
-        // Boid *members = (Boid *) malloc(sizeof(Boid)*maxMembersPerQuadrant);
 
         vector<Boid> members;
 

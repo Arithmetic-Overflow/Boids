@@ -12,13 +12,9 @@ Quadtree::Quadtree(Boid boidArray[]) {
 
     this->members = vector<Boid>(numBoids);
 
-    // cout << 1 << endl;
-
     for(int i = 0; i < numBoids; i++) {
         this->members[i] = boidArray[i];
     }
-
-    // cout << 2 << endl;
 
     this->limitMembers();
 }
@@ -53,12 +49,6 @@ bool Quadtree::containsPoint(Vector2i point) {
 
 // inclusive for lower bounds, exclusive for upper bounds
 bool Quadtree::containsBoid(Boid boid) {
-    // int bx = (int) boid.p.x;
-    // int by = (int) boid.p.y;
-
-    // these calculations being done multiple times is a reundancy
-    // in the future I will factor them out
-    
     return this->containsPoint(boid.p);
 }
 
@@ -115,11 +105,6 @@ vector<Boid> Quadtree::searchBoids(Boid boid) {
 
 
 bool Quadtree::intersectsRect(Vector2i vertices[]) {
-    // bool intersects = false;
-    // for(int i = 0; i < 4; i++) {
-    //     intersects |= this->containsPoint(vertices[i]);
-    // }
-
     bool spansQuad = true;
     
     int leftCount  = 0;
@@ -184,23 +169,7 @@ vector<Boid> Quadtree::nearbyBoids(Boid boid) {
         Vector2i(boid.p.x + boid.visionRad, boid.p.y - boid.visionRad)
     };
 
-    // Vector2i searchSquare[4] = {
-        // Vector2i(400, 400),
-        // Vector2i(900, 400),
-        // Vector2i(900, 700),
-        // Vector2i(400, 700)
-    // };
-
     vector<Boid> nearby = this->closeBoidsInNode(searchSquare);
-
-    // for(int i = 0; i < nearby.size(); i++) {
-    //     // cout << nearby[i].p.x << endl;
-    //     if(boid.p == nearby[i].p) {
-    //         nearby.erase(nearby.begin() + i);
-    //         break;
-    //     } 
-    // }
-    // cout << endl;
 
     for(int i = 0; i < nearby.size(); i++) {
         if(nearby[i].p == boid.p) {
@@ -223,8 +192,6 @@ vector<RectangleShape> Quadtree::getRect(void) {
     rect.move((Vector2f) this->p);
 
     rects.push_back(rect);
-
-    // cout << 1 << endl;
 
     if(children[0] == NULL) {
         return rects;

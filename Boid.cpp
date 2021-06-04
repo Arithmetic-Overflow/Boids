@@ -126,8 +126,6 @@ float Boid::angleBetween(Boid target) {
     Vector2f deltaP = target.p - this->p;
     float a = angle(this->v, deltaP);
 
-    // cout << a << endl;
-
     return a;
 }
 
